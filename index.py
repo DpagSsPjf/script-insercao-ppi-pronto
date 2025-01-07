@@ -10,11 +10,17 @@ login = '12801230600'
 
 senha = '123456'
 
-planilha_convercao = 0
+#planilha_dados = 'dados_insercao.xlsx'
 
-dados_convercao = 0
+planilha_convercao = 'dados_conversao.xlsx'
 
-dados_insercao = 0
+dados_convercao = pd.read_excel(planilha_convercao)
+
+#dados_insercao = pd.read_excel(planilha_dados)
+
+procedimento_filtrado = dados_convercao[dados_convercao['cod_interno_sisreg'] == '0001005']
+
+print(procedimento_filtrado.values)
 
 navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
 time.sleep(2)
@@ -25,3 +31,14 @@ botao_login = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/form/d
 
 while len(navegador.find_elements(By.XPATH,'//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]')) < 1:
     time.sleep(1)
+
+municipio_sede = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]').send_keys('2')
+
+ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]').send_keys('2025')
+
+mes = navegador.find_element(By.XPATH, '//*[@id="div_dados_pactuacao"]/div[9]/div[3]/div/span/span[1]/span/span[2]/b').click()
+
+mes_input = navegador.find_element(By.XPATH, '/html/body/span/span/span[1]/input').send_keys('janeiro')
+
+
+time.sleep(3)
