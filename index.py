@@ -4,6 +4,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 import time
 import pandas as pd
+import math
 navegador = webdriver.Chrome()
 acoes = ActionChains(navegador)
 
@@ -60,6 +61,7 @@ camp_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_p
 
 time.sleep(0.3)
 
-camp_especialidade_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_cbo_especialidade_id"]').send_keys(especialidade_cbo)
+if math.isnan(especialidade_cbo):
+    camp_especialidade_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_cbo_especialidade_id"]').send_keys(especialidade_cbo)
 
 time.sleep(3)
