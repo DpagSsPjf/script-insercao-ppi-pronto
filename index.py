@@ -12,15 +12,24 @@ senha = '123456'
 
 #planilha_dados = 'dados_insercao.xlsx'
 
-planilha_convercao = 'dados_conversao.xlsx'
+colunas_convercao = ['cod_unico_sisreg','cod_interno_sisreg','cod_procedimento',
+                     'cod_CBO','esp_CBO']
 
-dados_convercao = pd.read_excel(planilha_convercao)
+planilha_convercao = 'dados_convercao.xlsx'
+
+df = pd.read_excel(planilha_convercao, dtype={coluna: str for coluna in colunas_convercao})
 
 #dados_insercao = pd.read_excel(planilha_dados)
 
-procedimento_filtrado = dados_convercao[dados_convercao['cod_interno_sisreg'] == '0001005']
+procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == '9000024'].values.flatten()
 
-print(procedimento_filtrado.values)
+print(procedimento_filtrado)
+
+procedimento = procedimento_filtrado[0]
+
+cbo = procedimento_filtrado[3]
+
+especialidade_cbo = procedimento_filtrado[4]
 
 navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
 time.sleep(2)
@@ -39,6 +48,5 @@ ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]')
 mes = navegador.find_element(By.XPATH, '//*[@id="div_dados_pactuacao"]/div[9]/div[3]/div/span/span[1]/span/span[2]/b').click()
 
 mes_input = navegador.find_element(By.XPATH, '/html/body/span/span/span[1]/input').send_keys('janeiro')
-
 
 time.sleep(3)
