@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import pandas as pd
 navegador = webdriver.Chrome()
+acoes = ActionChains(navegador)
 
 login = '12801230600'
 
@@ -48,5 +49,17 @@ ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]')
 mes = navegador.find_element(By.XPATH, '//*[@id="div_dados_pactuacao"]/div[9]/div[3]/div/span/span[1]/span/span[2]/b').click()
 
 mes_input = navegador.find_element(By.XPATH, '/html/body/span/span/span[1]/input').send_keys('janeiro')
+
+acoes.send_keys(Keys.ENTER).perform()
+
+camp_procedimento = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_adm_procedimento_id"]').send_keys(procedimento)
+
+time.sleep(0.3)
+
+camp_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_adm_especialidade_id"]').send_keys(cbo)
+
+time.sleep(0.3)
+
+camp_especialidade_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_cbo_especialidade_id"]').send_keys(especialidade_cbo)
 
 time.sleep(3)
