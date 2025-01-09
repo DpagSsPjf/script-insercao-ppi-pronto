@@ -22,16 +22,6 @@ df = pd.read_excel(planilha_convercao, dtype={coluna: str for coluna in colunas_
 
 #dados_insercao = pd.read_excel(planilha_dados)
 
-procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == '0701483'].values.flatten()
-
-print(procedimento_filtrado)
-
-procedimento = procedimento_filtrado[0]
-
-cbo = procedimento_filtrado[3]
-
-especialidade_cbo = procedimento_filtrado[4]
-
 navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
 time.sleep(2)
 
@@ -54,6 +44,16 @@ def inserir_dados_padroes():
     acoes.send_keys(Keys.ENTER).perform()
 
 def inserir_dados_variaveis(cod_cbo):
+    procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == '0701483'].values.flatten()
+
+    print(procedimento_filtrado)
+
+    procedimento = procedimento_filtrado[0]
+
+    cbo = procedimento_filtrado[3]
+
+    especialidade_cbo = procedimento_filtrado[4]
+    
     camp_procedimento = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_adm_procedimento_id"]').send_keys(procedimento)
 
     time.sleep(0.3)
