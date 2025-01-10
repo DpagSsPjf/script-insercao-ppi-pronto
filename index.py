@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
 import time
 import pandas as pd
 import math
@@ -106,9 +107,16 @@ for i, row in dados_insercao.iterrows():
 
     time.sleep(1)
 
-    todas_regras = navegador.find_element(By.XPATH, '//*[@id="modal_replicar_regras"]/div[3]/div/label').click()
+    ano_final = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_replica_ano"]').send_keys('2025')
 
-    anofinal = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_replica_ano"]').send_keys('2025')
+    select_mes_final=navegador.find_element(By.XPATH, '//*[@id="select2-ppi_definicao_pactuacao_replica_mes-container"]').click()
 
-    
-    time.sleep(100000)
+    time.sleep(0.3)
+
+    select_element = navegador.find_element(By.ID, "ppi_definicao_pactuacao_replica_mes")
+
+    select = Select(select_element)
+  
+    select.select_by_value('12')
+
+    time.sleep(10000)
