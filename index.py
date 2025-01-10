@@ -12,15 +12,17 @@ login = '12801230600'
 
 senha = '123456'
 
-#planilha_dados = 'dados_insercao.xlsx'
+planilha_convercao = 'dados_convercao.xlsx'
+
+planilha_dados = 'dados_sisreg.xlsx'
 
 colunas_convercao = ['cod_unico_sisreg','cod_interno_sisreg','cod_procedimento','cod_CBO','esp_CBO']
 
-planilha_convercao = 'dados_convercao.xlsx'
+colunas_dados_sisreg = ['Cod. Unificado', 'Cod. Interno', 'PPI Total', 'PPI Usada', 'PPI Saldo']
 
 df = pd.read_excel(planilha_convercao, dtype={coluna: str for coluna in colunas_convercao})
 
-#dados_insercao = pd.read_excel(planilha_dados)
+dados_insercao = pd.read_excel(planilha_dados, dtype={coluna: str for coluna in colunas_dados_sisreg})
 
 navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
 time.sleep(2)
@@ -43,17 +45,17 @@ def inserir_dados_padroes():
 
     acoes.send_keys(Keys.ENTER).perform()
 
-def inserir_dados_variaveis(cod_cbo):
-    procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == '0701483'].values.flatten()
+def inserir_dados_variaveis(cod_interno_sisreg):
+    procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == cod_interno_sisreg].values.flatten()
 
     print(procedimento_filtrado)
 
-    procedimento = procedimento_filtrado[0]
+    procedimento = procedimento_filtrado[2]
 
     cbo = procedimento_filtrado[3]
 
     especialidade_cbo = procedimento_filtrado[4]
-    
+
     camp_procedimento = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_adm_procedimento_id"]').send_keys(procedimento)
 
     time.sleep(0.3)
@@ -62,7 +64,51 @@ def inserir_dados_variaveis(cod_cbo):
 
     time.sleep(0.3)
 
-    if math.isnan(int(especialidade_cbo)) == False:
+    if math.isnan(especialidade_cbo) == False:
         camp_especialidade_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_cbo_especialidade_id"]').send_keys(especialidade_cbo)
 
-    time.sleep(3)
+        time.sleep(0.3)
+    
+for i, row in dados_insercao.iterrows():
+    codigo_intern_sisreg = row['Cod. Interno']
+
+    quantidade = row['PPI Total']
+
+    municipio = row['Municipio']
+
+    inserir_dados_padroes()
+
+    inserir_dados_variaveis(codigo_intern_sisreg)
+
+    campo_quantidade = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_quantidade_pactuada"]').send_keys(quantidade)
+
+    selc_municipio = navegador.find_element(By.XPATH, '//*[@id="select2-lookup_name_ppi_definicao_pactuacao_ram_lista_municipio_referencia_id-container"]').click()
+
+    time.sleep(0.3)
+
+    campo_municipio = navegador.find_element(By.XPATH, '/html/body/span/span/span[1]/input').send_keys(municipio)
+
+    time.sleep(1)
+
+    button_pesquisar = navegador.find_element(By.XPATH, '//*[@id="btn_pesquisar"]').click()
+
+    time.sleep(1)
+
+    ppi = navegador.find_element(By.XPATH, '//*[@id="table_grid"]/tbody/tr/td[3]')
+    
+    time.sleep(1)
+
+    acoes.double_click(ppi).perform()
+
+    time.sleep(2)
+
+    replicar = navegador.find_element(By.XPATH, '//*[@id="btn_replicar"]').click()
+
+    time.sleep(1)
+
+    todas_regras = navegador.find_element(By.XPATH, '//*[@id="modal_replicar_regras"]/div[3]/div/label').click()
+
+    anofinal = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_replica_ano"]').send_keys('2025')
+
+    
+    time.sleep(100000)
