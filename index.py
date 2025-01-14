@@ -91,13 +91,13 @@ for i, row in dados_insercao.iterrows():
 
     time.sleep(1)
 
-    button_pesquisar = navegador.find_element(By.XPATH, '//*[@id="btn_pesquisar"]').click()
+    incluir = navegador.find_element(By.XPATH, '//*[@id="btn_adicionar"]').click()
 
     time.sleep(1)
 
     ppi = navegador.find_element(By.XPATH, '//*[@id="table_grid"]/tbody/tr/td[3]')
     
-    time.sleep(1)
+    time.sleep(1000)
 
     acoes.double_click(ppi).perform()
 
@@ -118,5 +118,11 @@ for i, row in dados_insercao.iterrows():
     select = Select(select_element)
   
     select.select_by_value('12')
+
+    time.sleep(0.1)
+
+    ano_final = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_replica_ano"]').click()
+
+    btn_confirmar = navegador.find_element(By.XPATH, '//*[@id="modal_replicar_regras_confirma"]').click()
 
     time.sleep(10000)
