@@ -13,6 +13,12 @@ login = '12801230600'
 
 senha = '123456'
 
+erros = []
+
+item_repitidos = []
+
+sucesso = []
+
 planilha_convercao = 'dados_convercao.xlsx'
 
 planilha_dados = 'dados_sisreg.xlsx'
@@ -46,8 +52,7 @@ def inserir_dados_padroes():
 
     acoes.send_keys(Keys.ENTER).perform()
 
-def inserir_dados_variaveis(cod_interno_sisreg):
-    procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == cod_interno_sisreg].values.flatten()
+def inserir_dados_variaveis(procedimento_filtrado):
 
     print(procedimento_filtrado)
 
@@ -65,7 +70,7 @@ def inserir_dados_variaveis(cod_interno_sisreg):
 
     time.sleep(0.3)
 
-    if math.isnan(especialidade_cbo) == False:
+    if isinstance(especialidade_cbo, int):
         camp_especialidade_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_cbo_especialidade_id"]').send_keys(especialidade_cbo)
 
         time.sleep(0.3)
@@ -77,9 +82,17 @@ for i, row in dados_insercao.iterrows():
 
     municipio = row['Municipio']
 
-    inserir_dados_padroes()
+    procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == codigo_intern_sisreg].values.flatten()
 
-    inserir_dados_variaveis(codigo_intern_sisreg)
+    if len(procedimento_filtrado) <1:
+        mensagem_erro = f'Erro ao inserir o procedimento {codigo_intern_sisreg} do municipio {municipio}'
+        erros.append(mensagem_erro)
+        print(mensagem_erro)
+        continue
+
+    inserir_dados_variaveis(procedimento_filtrado)
+
+    inserir_dados_padroes()
 
     campo_quantidade = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_quantidade_pactuada"]').send_keys(quantidade)
 
@@ -95,9 +108,19 @@ for i, row in dados_insercao.iterrows():
 
     time.sleep(1)
 
+    if len(navegador.find_elements(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]')) > 0:
+        error_message = f''
+        
+        item_repitidos.append
+
+        btn_error_ok = navegador.find_element(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]').click()
+        continue
+
+    time.sleep(1000)
+
     ppi = navegador.find_element(By.XPATH, '//*[@id="table_grid"]/tbody/tr/td[3]')
     
-    time.sleep(1000)
+    time.sleep(1)
 
     acoes.double_click(ppi).perform()
 
