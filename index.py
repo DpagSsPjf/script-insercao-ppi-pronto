@@ -109,9 +109,11 @@ for i, row in dados_insercao.iterrows():
     time.sleep(1)
 
     if len(navegador.find_elements(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]')) > 0:
-        error_message = f''
+        error_message = f'Item com codigo {codigo_intern_sisreg} do municipio {municipio} já foi inserido.'
+
+        print(error_message)
         
-        item_repitidos.append
+        item_repitidos.append(error_message)
 
         btn_error_ok = navegador.find_element(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]').click()
         continue
