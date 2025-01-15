@@ -9,38 +9,6 @@ import math
 navegador = webdriver.Chrome()
 acoes = ActionChains(navegador)
 
-login = '12801230600'
-
-senha = '123456'
-
-erros = []
-
-item_repitidos = []
-
-sucesso = []
-
-planilha_convercao = 'dados_convercao.xlsx'
-
-planilha_dados = 'dados_sisreg.xlsx'
-
-colunas_convercao = ['cod_unico_sisreg','cod_interno_sisreg','cod_procedimento','cod_CBO','esp_CBO']
-
-colunas_dados_sisreg = ['Cod. Unificado', 'Cod. Interno', 'PPI Total', 'PPI Usada', 'PPI Saldo']
-
-df = pd.read_excel(planilha_convercao, dtype={coluna: str for coluna in colunas_convercao})
-
-dados_insercao = pd.read_excel(planilha_dados, dtype={coluna: str for coluna in colunas_dados_sisreg})
-
-navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
-time.sleep(2)
-
-login = navegador.find_element(By.XPATH, '//*[@id="conta"]').send_keys(login)
-senha = navegador.find_element(By.XPATH, '//*[@id="password"]').send_keys(senha)
-botao_login = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/form/div[2]').click()
-
-while len(navegador.find_elements(By.XPATH,'//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]')) < 1:
-    time.sleep(1)
-
 def inserir_dados_padroes():
     municipio_sede = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]').send_keys('2')
 
@@ -74,6 +42,44 @@ def inserir_dados_variaveis(procedimento_filtrado):
         camp_especialidade_cbo = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_cbo_especialidade_id"]').send_keys(especialidade_cbo)
 
         time.sleep(0.3)
+
+def apagar_campo():
+    acoes.send_keys(Keys.BACKSPACE).perform()
+    acoes.send_keys(Keys.BACKSPACE).perform()
+    acoes.send_keys(Keys.BACKSPACE).perform()
+    acoes.send_keys(Keys.BACKSPACE).perform()
+
+login = '12801230600'
+
+senha = '123456'
+
+erros = []
+
+item_repitidos = []
+
+sucesso = []
+
+planilha_convercao = 'dados_convercao.xlsx'
+
+planilha_dados = 'dados_sisreg.xlsx'
+
+colunas_convercao = ['cod_unico_sisreg','cod_interno_sisreg','cod_procedimento','cod_CBO','esp_CBO']
+
+colunas_dados_sisreg = ['Cod. Unificado', 'Cod. Interno', 'PPI Total', 'PPI Usada', 'PPI Saldo']
+
+df = pd.read_excel(planilha_convercao, dtype={coluna: str for coluna in colunas_convercao})
+
+dados_insercao = pd.read_excel(planilha_dados, dtype={coluna: str for coluna in colunas_dados_sisreg})
+
+navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
+time.sleep(2)
+
+login = navegador.find_element(By.XPATH, '//*[@id="conta"]').send_keys(login)
+senha = navegador.find_element(By.XPATH, '//*[@id="password"]').send_keys(senha)
+botao_login = navegador.find_element(By.XPATH, '/html/body/div[1]/div/div/form/div[2]').click()
+
+while len(navegador.find_elements(By.XPATH,'//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]')) < 1:
+    time.sleep(1)
     
 for i, row in dados_insercao.iterrows():
     codigo_intern_sisreg = row['Cod. Interno']
@@ -116,6 +122,26 @@ for i, row in dados_insercao.iterrows():
         item_repitidos.append(error_message)
 
         btn_error_ok = navegador.find_element(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]').click()
+
+        time.sleep(1)
+
+        limpar_cidade = navegador.find_element(By.XPATH, '//*[@id="select2-lookup_name_ppi_definicao_pactuacao_ram_lista_municipio_sede_id-container"]/span').click()
+
+        limpar_muni_ref = navegador.find_element(By.XPATH, '//*[@id="select2-lookup_name_ppi_definicao_pactuacao_ram_lista_municipio_referencia_id-container"]/span').click()
+
+        limpar_procedimento = navegador.find_element(By.XPATH, '//*[@id="select2-lookup_name_ppi_definicao_pactuacao_adm_procedimento_id-container"]/span').click()
+
+        limpar_mes = navegador.find_element(By.XPATH, '//*[@id="select2-ppi_definicao_pactuacao_mes-container"]/span').click()
+
+        ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]').click()
+
+        apagar_campo()
+
+        qtd = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_quantidade_pactuada"]').click()
+
+        apagar_campo()
+
+        time.sleep(1000)
         continue
 
     time.sleep(1000)
