@@ -6,6 +6,7 @@ from selenium.webdriver.support.ui import Select
 import time
 import pandas as pd
 import math
+from login import login, senha
 navegador = webdriver.Chrome()
 acoes = ActionChains(navegador)
 
@@ -48,10 +49,6 @@ def apagar_campo():
     acoes.send_keys(Keys.BACKSPACE).perform()
     acoes.send_keys(Keys.BACKSPACE).perform()
     acoes.send_keys(Keys.BACKSPACE).perform()
-
-login = '12801230600'
-
-senha = '123456'
 
 erros = []
 
