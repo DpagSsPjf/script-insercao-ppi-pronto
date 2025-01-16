@@ -23,8 +23,6 @@ def inserir_dados_padroes():
 
 def inserir_dados_variaveis(procedimento_filtrado):
 
-    print(procedimento_filtrado)
-
     procedimento = procedimento_filtrado[2]
 
     cbo = procedimento_filtrado[3]
@@ -138,10 +136,11 @@ for i, row in dados_insercao.iterrows():
 
         apagar_campo()
 
-        time.sleep(1000)
+        time.sleep(0.3)
+        
         continue
 
-    time.sleep(1000)
+    time.sleep(0,3)
 
     ppi = navegador.find_element(By.XPATH, '//*[@id="table_grid"]/tbody/tr/td[3]')
     
@@ -173,4 +172,4 @@ for i, row in dados_insercao.iterrows():
 
     btn_confirmar = navegador.find_element(By.XPATH, '//*[@id="modal_replicar_regras_confirma"]').click()
 
-    time.sleep(10000)
+    time.sleep(2)
