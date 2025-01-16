@@ -86,7 +86,7 @@ for i, row in dados_insercao.iterrows():
     procedimento_filtrado = df.loc[df['cod_interno_sisreg'] == codigo_intern_sisreg].values.flatten()
 
     if len(procedimento_filtrado) <1:
-        mensagem_erro = f'Erro ao inserir o procedimento {codigo_intern_sisreg} do municipio {municipio}'
+        mensagem_erro = f'Não encontrado na planilha de conversão - procedimento {codigo_intern_sisreg} do municipio {municipio}'
         erros.append(mensagem_erro)
         print(mensagem_erro)
         continue
@@ -107,7 +107,7 @@ for i, row in dados_insercao.iterrows():
 
     incluir = navegador.find_element(By.XPATH, '//*[@id="btn_adicionar"]').click()
 
-    time.sleep(1)
+    time.sleep(3)
 
     if len(navegador.find_elements(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]')) > 0:
         error_message = f'Item com codigo {codigo_intern_sisreg} do municipio {municipio} já foi inserido.'
@@ -171,5 +171,9 @@ for i, row in dados_insercao.iterrows():
     ano_final = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_replica_ano"]').click()
 
     btn_confirmar = navegador.find_element(By.XPATH, '//*[@id="modal_replicar_regras_confirma"]').click()
+
+    mensagem_sucesso = f'SUCESSO ao inserir {codigo_intern_sisreg} - {municipio}'
+
+    print(mensagem_sucesso)
 
     time.sleep(2)
