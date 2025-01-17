@@ -13,7 +13,7 @@ acoes = ActionChains(navegador)
 def inserir_dados_padroes():
     municipio_sede = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]').send_keys('2')
 
-    time.sleep(0.1)
+    time.sleep(0.2)
 
     ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]').send_keys('2025')
 
@@ -98,9 +98,11 @@ for i, row in dados_insercao.iterrows():
         print(mensagem_erro)
         continue
 
-    inserir_dados_variaveis(procedimento_filtrado)
-
     inserir_dados_padroes()
+
+    time.sleep(0.2)
+
+    inserir_dados_variaveis(procedimento_filtrado)
 
     campo_quantidade = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_quantidade_pactuada"]').send_keys(quantidade)
 
@@ -139,9 +141,13 @@ for i, row in dados_insercao.iterrows():
 
         limpar_mes = navegador.find_element(By.XPATH, '//*[@id="select2-ppi_definicao_pactuacao_mes-container"]/span').click()
 
+        time.sleep(0.1)
+
         ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]').click()
 
         apagar_campo()
+
+        time.sleep(0.1)
 
         qtd = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_quantidade_pactuada"]').click()
 
@@ -151,7 +157,11 @@ for i, row in dados_insercao.iterrows():
         
         continue
 
-    time.sleep(0.3)
+    time.sleep(3)
+
+    btn_error_ok = navegador.find_element(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]').click()
+
+    time.sleep(1.3)
 
     ppi = navegador.find_element(By.XPATH, '//*[@id="table_grid"]/tbody/tr/td[3]')
     
