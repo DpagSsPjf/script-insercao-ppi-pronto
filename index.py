@@ -13,9 +13,15 @@ acoes = ActionChains(navegador)
 def inserir_dados_padroes():
     municipio_sede = navegador.find_element(By.XPATH, '//*[@id="lookup_key_ppi_definicao_pactuacao_ram_lista_municipio_sede_id"]').send_keys('2')
 
+    time.sleep(0.1)
+
     ano = navegador.find_element(By.XPATH, '//*[@id="ppi_definicao_pactuacao_ano"]').send_keys('2025')
 
+    time.sleep(0.1)
+
     mes = navegador.find_element(By.XPATH, '//*[@id="div_dados_pactuacao"]/div[9]/div[3]/div/span/span[1]/span/span[2]/b').click()
+
+    time.sleep(0.1)
 
     mes_input = navegador.find_element(By.XPATH, '/html/body/span/span/span[1]/input').send_keys('janeiro')
 
@@ -67,6 +73,7 @@ df = pd.read_excel(planilha_convercao, dtype={coluna: str for coluna in colunas_
 dados_insercao = pd.read_excel(planilha_dados, dtype={coluna: str for coluna in colunas_dados_sisreg})
 
 navegador.get('https://juizdefora-mg.vivver.com/ram/ppi/definicao_pactuacao')
+
 time.sleep(2)
 
 login = navegador.find_element(By.XPATH, '//*[@id="conta"]').send_keys(login)
@@ -107,13 +114,17 @@ for i, row in dados_insercao.iterrows():
 
     incluir = navegador.find_element(By.XPATH, '//*[@id="btn_adicionar"]').click()
 
-    time.sleep(3)
+    time.sleep(1)
 
-    if len(navegador.find_elements(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]')) > 0:
-        error_message = f'Item com codigo {codigo_intern_sisreg} do municipio {municipio} já foi inserido.'
+    elemento = navegador.find_element(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[2]/div')
+
+    texto = elemento.text
+
+    if "Já existe uma regra cadastrada para esses paramêtros." in texto:
+        error_message = f'Item com codigo {codigo_intern_sisreg} do municipio {municipio} já foi inserido. AAAAAAAAAAAAAA'
 
         print(error_message)
-        
+
         item_repitidos.append(error_message)
 
         btn_error_ok = navegador.find_element(By.XPATH, '//*[@id="fwk_show_dialog_modal"]/div/div/div[3]/div/button[1]').click()
@@ -140,7 +151,7 @@ for i, row in dados_insercao.iterrows():
         
         continue
 
-    time.sleep(0,3)
+    time.sleep(0.3)
 
     ppi = navegador.find_element(By.XPATH, '//*[@id="table_grid"]/tbody/tr/td[3]')
     
